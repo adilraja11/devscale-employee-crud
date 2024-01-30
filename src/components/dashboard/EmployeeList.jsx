@@ -1,9 +1,9 @@
 'use client'
 
 import React from "react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, getKeyValue} from "@nextui-org/react";
-import { EditIcon } from "../../../public/EditIcon.jsx";
-import { DeleteIcon } from "../../../public/DeleteIcon.jsx";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip} from "@nextui-org/react";
+import { UpdateEmployee } from "./UpdateEmployee.jsx";
+import { DeleteEmployee } from "./DeleteEmployee.jsx";
 
 export const EmployeeList = ({ data }) => {
     function isStatusColor(user) {
@@ -25,17 +25,17 @@ export const EmployeeList = ({ data }) => {
             case "name":
             return (
                 <User
-                    description={user.age}
+                    description={user.email}
                     name={cellValue}
                 >
-                {user.email}
+                    {user.email}
                 </User>
             );
             case "role":
             return (
                 <div className="flex flex-col">
-                <p className="text-bold text-sm capitalize">{cellValue}</p>
-                <p className="text-bold text-sm capitalize text-default-400">{user.department}</p>
+                    <p className="text-bold text-sm capitalize">{cellValue}</p>
+                    <p className="text-bold text-sm capitalize text-default-400">{user.department}</p>
                 </div>
             );
             case "status":
@@ -49,12 +49,12 @@ export const EmployeeList = ({ data }) => {
                 <div className="relative flex items-center gap-2">
                 <Tooltip content="Edit user">
                     <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <EditIcon />
+                    <UpdateEmployee key={user._id} item={user}/>
                     </span>
                 </Tooltip>
                 <Tooltip color="danger" content="Delete user">
                     <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <DeleteIcon />
+                    <DeleteEmployee key={user._id} item={user}/>
                     </span>
                 </Tooltip>
                 </div>

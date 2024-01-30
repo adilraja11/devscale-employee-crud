@@ -3,15 +3,16 @@
 import React, { useState } from 'react';
 import {Autocomplete, AutocompleteItem, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { EditIcon } from "../../../public/EditIcon.jsx";
 import toast from 'react-hot-toast';
 
-export const AddEmployee = () => {
+export const UpdateEmployee = ({item}) => {
     const router = useRouter();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [role, setRole] = useState('');
-    const [department, setDeparment] = useState('');
-    const [status, setStatus] = useState('');
+    const [name, setName] = useState(item.name);
+    const [email, setEmail] = useState(item.email);
+    const [role, setRole] = useState(item.role);
+    const [department, setDeparment] = useState(item.department);
+    const [status, setStatus] = useState(item.status);
 
     function onInputRoleChange(value) {
         setRole(value);
@@ -23,37 +24,34 @@ export const AddEmployee = () => {
         setStatus(value);
     }
 
-    async function handleCreateEmployee(onClose) {
+    async function handleUpdateEmployee(onClose) {
         try {
             const res = await fetch("https://v1.appbackend.io/v1/rows/0tYfIvqkRXwi", {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify([{ name, email, role, department, status }]),
+                body: JSON.stringify({ _id: item._id, name, email, role, department, status }),
             });
             const data = await res.json();
+            console.log(data);
             router.refresh();
         } catch (error) {
             console.error(error);
         }
         onClose();
-        toast.success('Employee berhasil di Tambah');
-        setName('');
-        setEmail('');
+        toast.success('Employee berhasil di Ubah');
     }
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
   return (
     <div>
-        <Button 
+        <Button
+            isIconOnly
             onPress={onOpen}
-            className='font-bold' 
             variant='shadow' 
-            size="md" 
-            radius='md' 
             color='warning'>
-            Add New Employee
+            <EditIcon />
         </Button>
         <Modal
             isOpen={isOpen}
@@ -62,7 +60,7 @@ export const AddEmployee = () => {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Add New Employee</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Update Employee</ModalHeader>
                             <ModalBody>
                                 <Input
                                     autoFocus
@@ -80,6 +78,7 @@ export const AddEmployee = () => {
                                     onValueChange={setEmail}
                                 />
                                 <Autocomplete
+                                    defaultInputValue={role}
                                     label="Select Role"
                                     placeholder="Select Role"
                                     onInputChange={onInputRoleChange}
@@ -89,6 +88,7 @@ export const AddEmployee = () => {
                                         <AutocompleteItem key='associate'>Associate</AutocompleteItem>
                                 </Autocomplete>
                                 <Autocomplete
+                                    defaultInputValue={department}
                                     label="Select Departement"
                                     placeholder="Select Departement"
                                     onInputChange={onInputDepartmentChange}
@@ -99,6 +99,7 @@ export const AddEmployee = () => {
                                         <AutocompleteItem key='design'>Design</AutocompleteItem>
                                 </Autocomplete>
                                 <Autocomplete
+                                    defaultInputValue={status}
                                     label="Select Status"
                                     placeholder="Select Status"
                                     onInputChange={onInputStatusChange}
@@ -112,8 +113,8 @@ export const AddEmployee = () => {
                                 <Button color="danger" variant="flat" onPress={onClose}>
                                 Close
                                 </Button>
-                                <Button color="warning" onPress={() => handleCreateEmployee(onClose)}>
-                                Add New Employee
+                                <Button color="warning" onPress={() => handleUpdateEmployee(onClose)}>
+                                Update Employee
                                 </Button>
                             </ModalFooter>
                         </>

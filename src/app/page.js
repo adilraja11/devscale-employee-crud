@@ -1,6 +1,7 @@
 import { Header } from "@/components/dashboard/Header";
 import { AddEmployee } from "@/components/dashboard/AddEmployee";
 import { EmployeeList } from "@/components/dashboard/EmployeeList";
+import { Footer } from "@/components/dashboard/Footer";
 
 export const dynamic = "force-dynamic"; // bypass si cache
 
@@ -16,7 +17,6 @@ async function getData() {
 
 export default async function Home() {
   const data = await getData();
-  // console.log(data.data);
 
   return (
     <div>
@@ -29,6 +29,7 @@ export default async function Home() {
         </div>
         <EmployeeList data={data?.data}/>
       </main>
+      <Footer />
     </div>
   );
 }
